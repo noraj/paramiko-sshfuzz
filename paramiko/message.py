@@ -25,6 +25,7 @@ import struct
 from paramiko import util
 from paramiko.common import zero_byte, max_byte, one_byte, asbytes
 from paramiko.py3compat import long, BytesIO, u, integer_types
+import paramiko.fuzz
 
 
 class Message (object):
@@ -205,6 +206,7 @@ class Message (object):
         """
         return self.get_text().split(',')
 
+    @paramiko.fuzz.FuzzMaster.candidate
     def add_bytes(self, b):
         """
         Write bytes to the stream, without any formatting.
@@ -214,6 +216,7 @@ class Message (object):
         self.packet.write(b)
         return self
 
+    @paramiko.fuzz.FuzzMaster.candidate
     def add_byte(self, b):
         """
         Write a single byte to the stream, without any formatting.
@@ -222,7 +225,8 @@ class Message (object):
         """
         self.packet.write(b)
         return self
-
+    
+    @paramiko.fuzz.FuzzMaster.candidate
     def add_boolean(self, b):
         """
         Add a boolean value to the stream.
@@ -235,6 +239,7 @@ class Message (object):
             self.packet.write(zero_byte)
         return self
             
+    @paramiko.fuzz.FuzzMaster.candidate
     def add_int(self, n):
         """
         Add an integer to the stream.
@@ -257,6 +262,7 @@ class Message (object):
             self.packet.write(struct.pack('>I', n))
         return self
 
+    @paramiko.fuzz.FuzzMaster.candidate
     def add_int64(self, n):
         """
         Add a 64-bit int to the stream.
@@ -276,6 +282,7 @@ class Message (object):
         self.add_string(util.deflate_long(z))
         return self
 
+    @paramiko.fuzz.FuzzMaster.candidate
     def add_string(self, s):
         """
         Add a string to the stream.
