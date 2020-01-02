@@ -22,23 +22,23 @@ For a working example see demos/fuzzing_corpus.py
 In this case we're defining an `add_string` function that adds an invalid
 length-prefix to the raw ssh-string on a random basis.
 
-	```
-	def add_string(self, s):
-	    """
-	    Add a string to the stream.
-	    
-	    :param str s: string to add
-	    """
-	    s = common.asbytes(s)
-	    if random.choice([False]*7+[True]):
-	        self.add_int(0xffffffff)
-	    else:
-	        self.add_int(len(s))
-	    self.packet.write(s)
-	    return self
-	```
+```
+def add_string(self, s):
+    """
+    Add a string to the stream.
+
+    :param str s: string to add
+    """
+    s = common.asbytes(s)
+    if random.choice([False]*7+[True]):
+	self.add_int(0xffffffff)
+    else:
+	self.add_int(len(s))
+    self.packet.write(s)
+    return self
+```
 	
-	```python
+```python
   FuzzMaster = paramiko.fuzz.FuzzMaster
   FuzzMaster.MUTATION_PER_RUN=10000
   #FuzzMaster.add_fuzzdef("add_byte",add_byte)
@@ -70,4 +70,4 @@ length-prefix to the raw ssh-string on a random basis.
           break
       except Exception, e:
           print repr(e)
-	```
+```
